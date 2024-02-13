@@ -154,8 +154,14 @@ On the source, run the following command to add the appropriate grant. This
 grant allows the replica to be able to connect to source:
 
 ```{.bash data-prompt="mysql>"}
-mysql> GRANT REPLICATION SLAVE ON *.*  TO 'repl'@'$replicaip'
-IDENTIFIED BY '$replicapass';
+mysql> CREATE USER 'repl'@'$replicaip' IDENTIFIED BY '$replicapass';
+mysql> GRANT REPLICATION SLAVE ON *.*  TO 'repl'@'$replicaip';
+```
+
+Verify the privileges.
+
+```{.bash data-prompt="mysql>"}
+mysql> SHOW GRANTS;
 ```
 
 Also make sure that firewall rules are correct and that the `Replica` can
@@ -164,13 +170,7 @@ that you can run the mysql client on `Replica`, connect to the `Source`,
 and authenticate.
 
 ```{.bash data-prompt="mysql>"}
-mysql> mysql --host=Source --user=repl --password=$replicapass
-```
-
-Verify the privileges.
-
-```{.bash data-prompt="mysql>"}
-mysql> SHOW GRANTS;
+$ mysql --host=Source --user=repl --password=$replicapass
 ```
 
 ## 4. Configure the Replica’s MySQL server
